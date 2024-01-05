@@ -1,0 +1,32 @@
+label, input, button{
+
+    margin: 10px;
+    padding: 5px;
+}
+
+.LoginForm{
+    display: grid;
+    justify-content: center;
+}
+.Login{
+    display: grid;
+    justify-items: center;
+}
+.successMessage{
+    background-color: rgb(0, 255, 200);
+    width: 500px;
+    display: flex;
+    justify-content: center;
+}
+.errorMessage{
+    background-color: rgb(255, 0, 0);
+    width: 500px;
+    display: flex;
+    justify-content: center;
+}
+footer{
+    bottom: 0;
+    position: absolute;
+    width: 90%;
+    height: 40px;
+}
