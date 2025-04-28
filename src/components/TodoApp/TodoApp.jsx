@@ -1,13 +1,14 @@
-import './TodoApp.css';
-import { BrowserRouter,Routes, Route, Navigate} from 'react-router-dom';
-import LogOutComponent from './LogoutComponent';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import ErrorComponent from './ErrorComponent';
 import FooterComponent from './FooterComponent';
 import HeaderComponent from './HeaderComponent';
 import ListTodosComponent from './ListTodosComponent';
-import ErrorComponent from './ErrorComponent';
 import LoginComponent from './LoginComponent';
+import LogOutComponent from './LogoutComponent';
+import './TodoApp.css';
 import WelcomeComponent from './WelcomeComponent';
 import AuthProvider, { useAuth } from './security/AuthContext';
+import { useState } from 'react';
 
 function AuthenticatedRoute({children}){
     const authContext = useAuth();
@@ -21,15 +22,19 @@ function AuthenticatedRoute({children}){
 }
 
 function TodoApp() {
+    const [loginUser, setLoginUser] = useState("")
 
+    const handleGetUser = (data) => {
+        setLoginUser(data);
+      };
     return(
         <div className="TodoApp">
             <AuthProvider>
                 <BrowserRouter>
-                    <HeaderComponent/>
+                    <HeaderComponent parentUser = {loginUser}/>
                     <Routes>
-                        <Route path='/' element={<LoginComponent />}></Route>
-                        <Route path='/login' element={<LoginComponent />}></Route>
+                        <Route path='/' element={<LoginComponent onSendData={handleGetUser}/>}></Route>
+                        <Route path='/login' element={<LoginComponent onSendData={handleGetUser}/>}></Route>
                         <Route path='/welcome/:username' 
                             element={
                                 <AuthenticatedRoute>

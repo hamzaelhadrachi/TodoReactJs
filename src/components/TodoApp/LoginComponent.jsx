@@ -3,13 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from './security/AuthContext';
 
 
-function LoginComponent(){
+function LoginComponent({ onSendData }){
 
     const [username, setUsername] = useState('hamza');
     const [password, setPassword] = useState('hamza');
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const navigate = useNavigate();
     const authContext = useAuth()
+    const sendUserToParent = () => {
+        const value = username;
+        onSendData(value); // Call the parent function
+      };
+
+    const handleClick = () => {
+        handleSubmit()
+        sendUserToParent()
+    }
 
     function handleUserNameChange (event) {
         setUsername(event.target.value);
@@ -45,7 +54,7 @@ function LoginComponent(){
                     <input type="password" name="password" value={password} onChange={handlePasswordChange}></input>
                 </div> 
                 <div>
-                    <button type="button" name="login" onClick={handleSubmit}>Login</button>
+                    <button type="button" name="login" onClick={handleClick}>Login</button>
                 </div>
             </div>
         </div>
