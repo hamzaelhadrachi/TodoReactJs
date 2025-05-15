@@ -1,0 +1,10 @@
+.WelcomeComponent{
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+.TodoComponentContainer{
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
