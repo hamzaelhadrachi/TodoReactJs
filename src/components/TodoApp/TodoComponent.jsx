@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
 import { useAuth } from "./security/AuthContext";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { retrieveTodoForUser, updateTodoForUser,createTodoForUser } from "./api/TodoApiService";
 import { Formik, Form, Field, ErrorMessage} from "formik";
 import { useNavigate } from "react-router-dom";
@@ -15,41 +14,31 @@ export default function TodoComponent() {
     const [targetDate, setTargetDate] = useState('');
     const navigate = useNavigate();
 
-    useEffect(
-        () => {
-            if (id !== -1) {
-                retrieveTodos(id);
-            }
-        }, [id]
-    )
-
-    function retrieveTodos(id) {
+    const retrieveTodos = useCallback((id) => {
         console.log('retrieve todo with id: ' + id);
-        if (id != -1) {
+        if (id !== -1) {
             retrieveTodoForUser(username, id)
-            .then(
-               response => {
-                setDescription(response.data.description);
-                setTargetDate(response.data.targetDate);
-               }
-            ).catch(
-                error => {
+                .then(response => {
+                    setDescription(response.data.description);
+                    setTargetDate(response.data.targetDate);
+                })
+                .catch(error => {
                     console.log(error);
-                }
-            )
-        }else {
-            createTodoForUser(username, id).then(
-                response => {
+                });
+        } else {
+            createTodoForUser(username, id)
+                .then(response => {
                     navigate('/todos');
-                }
-            ).catch(
-                error => {
+                })
+                .catch(error => {
                     console.log(error);
-                }
-            )
+                });
         }
+    }, [username, navigate]); 
 
-    }
+    useEffect(() => {
+        retrieveTodos(id);
+    }, [id, retrieveTodos]);
 
     function onSubmit(values) {
         console.log(values);

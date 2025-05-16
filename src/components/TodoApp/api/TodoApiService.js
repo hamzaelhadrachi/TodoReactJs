@@ -8,7 +8,7 @@ export const retrieveTodoForUser = (user,id) => apiClient.get(`/users/${user}/to
 
 export const updateTodoForUser = (user,id, todo) => apiClient.put(`/users/${user}/todos/${id}`, todo);
 
-export const createTodoForUser = (user, todo) => apiClient.put(`/users/${user}/todos`, todo);
+export const createTodoForUser = (user, todo) => apiClient.post(`/users/${user}/todos`, todo);
 
 export const executeBasicAuthenticationService = (token) => 
     apiClient.get('/basicauth', {
