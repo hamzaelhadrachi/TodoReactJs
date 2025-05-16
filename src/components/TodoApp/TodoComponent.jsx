@@ -2,8 +2,9 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "./security/AuthContext";
 import { useState } from "react";
-import { retrieveTodoForUser, updateTodoForUser } from "./api/TodoApiService";
+import { retrieveTodoForUser, updateTodoForUser,createTodoForUser } from "./api/TodoApiService";
 import { Formik, Form, Field, ErrorMessage} from "formik";
+import { useNavigate } from "react-router-dom";
 
 export default function TodoComponent() {
 
@@ -12,6 +13,7 @@ export default function TodoComponent() {
     const username = AuthContext.userName;
     const [description, setDescription] = useState([]);
     const [targetDate, setTargetDate] = useState('');
+    const navigate = useNavigate();
 
     useEffect(
         () => {
@@ -23,18 +25,30 @@ export default function TodoComponent() {
 
     function retrieveTodos(id) {
         console.log('retrieve todo with id: ' + id);
-        
-        retrieveTodoForUser(username, id)
-        .then(
-           response => {
-            setDescription(response.data.description);
-            setTargetDate(response.data.targetDate);
-           }
-        ).catch(
-            error => {
-                console.log(error);
-            }
-        )
+        if (id != -1) {
+            retrieveTodoForUser(username, id)
+            .then(
+               response => {
+                setDescription(response.data.description);
+                setTargetDate(response.data.targetDate);
+               }
+            ).catch(
+                error => {
+                    console.log(error);
+                }
+            )
+        }else {
+            createTodoForUser(username, id).then(
+                response => {
+                    navigate('/todos');
+                }
+            ).catch(
+                error => {
+                    console.log(error);
+                }
+            )
+        }
+
     }
 
     function onSubmit(values) {
@@ -46,7 +60,16 @@ export default function TodoComponent() {
             targetDate: values.targetDate,
             done: false
         }
-        updateTodoForUser(username, id, todo)
+        updateTodoForUser(username, id, todo).then(
+            response => {
+                // Redirect to the ListTodosComponent
+                navigate('/todos');
+            }
+        ).catch(
+            error => {
+                console.log(error);
+            }
+        )
         console.log(todo);
     }
     function validate(values) {
